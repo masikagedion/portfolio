@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gideon</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #ededed;
+  color: #333333;
+  overflow-wrap: break-word;
+}
+
+/* these 3 radio buttons are what switches the pages.
+   no javascript, the css below does the work */
+.t1, .t2, .t3 {
+  display: none;
+}
+
+/* the white box around everything */
+.box {
+  max-width: 1000px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #ffffff;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+}
+
+/* top bar */
+.navbar {
+  background: #555555;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.logo {
+  background: #dddddd;
+  padding: 8px 18px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.links label {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid transparent;
+  padding: 8px 14px;
+  margin: 4px 0 4px 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.links label:hover {
+  background: #dddddd;
+}
+
+.t1:checked ~ .navbar label[for="t1"],
+.t2:checked ~ .navbar label[for="t2"],
+.t3:checked ~ .navbar label[for="t3"] {
+  background: #333333;
+  color: #ffffff;
+}
+
+/* the pages, only the checked one shows up */
+.screen {
+  display: none;
+  padding: 25px;
+  background: #e4e4e4;
+  min-height: 420px;
+}
+
+.t1:checked ~ #home,
+.t2:checked ~ #about,
+.t3:checked ~ #tasks {
+  display: block;
+}
+
+/* buttons */
+.btn {
+  display: inline-block;
+  background: #ffffff;
+  color: #333333;
+  border: 1px solid #bbbbbb;
+  padding: 10px 18px;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #dddddd;
+}
+
+.btn.dark {
+  background: #333333;
+  color: #ffffff;
+  border: 1px solid #333333;
+}
+
+.btn.dark:hover {
+  background: #000000;
+}
+
+/* home */
+#home {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+#home h1 {
+  font-size: 30px;
+  line-height: 1.4;
+  margin-bottom: 25px;
+  color: #222222;
+}
+
+/* about */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  padding: 20px;
+}
+
+.profile {
+  flex: 1 1 220px;
+  text-align: center;
+}
+
+.face {
+  width: 100px;
+  height: 100px;
+  background: #dde3ea;
+  border-radius: 50%;
+  margin: 0 auto 15px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: #8a9099;
+}
+
+.profile h2 {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.profile span {
+  font-size: 13px;
+  color: #777777;
+}
+
+.info {
+  flex: 2 1 320px;
+}
+
+.info .card {
+  margin-bottom: 15px;
+}
+
+.info h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.info p {
+  font-size: 14px;
+  color: #666666;
+}
+
+.tags span {
+  display: inline-block;
+  background: #eeeeee;
+  border: 1px solid #cccccc;
+  border-radius: 14px;
+  padding: 5px 12px;
+  margin: 0 5px 5px 0;
+  font-size: 12px;
+}
+
+/* tasks */
+#tasks .top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+#tasks h2 {
+  font-size: 22px;
+}
+
+.counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.counts .card {
+  flex: 1 1 150px;
+}
+
+.counts .name {
+  font-size: 12px;
+  color: #666666;
+  margin-bottom: 5px;
+}
+
+.counts b {
+  display: block;
+  font-size: 26px;
+  margin-bottom: 3px;
+}
+
+.counts small {
+  font-size: 12px;
+  color: #888888;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filters input,
+.filters select {
+  flex: 1 1 160px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  padding: 9px 10px;
+  border: 1px solid #bbbbbb;
+  background: #ffffff;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+
+  <input class="t1" type="radio" name="tabs" id="t1" checked>
+  <input class="t2" type="radio" name="tabs" id="t2">
+  <input class="t3" type="radio" name="tabs" id="t3">
+
+  <div class="navbar">
+    <div class="logo">GIDEON</div>
+    <div class="links">
+      <label for="t1">Home</label>
+      <label for="t2">About Me</label>
+      <label for="t3">Task Dashboard</label>
+    </div>
+  </div>
+
+  <div class="screen" id="home">
+    <h1>Hi, I'm Gideon.<br>Welcome to my project.</h1>
+    <label class="btn dark" for="t3">Open Task Dashboard</label>
+    <label class="btn" for="t2">About Me</label>
+  </div>
+
+  <div class="screen" id="about">
+    <div class="row">
+
+      <div class="card profile">
+        <div class="face">G</div>
+        <h2>Gideon Masika</h2>
+        <span>Student</span>
+      </div>
+
+      <div class="info">
+        <div class="card">
+          <h3>About me</h3>
+          <p>I'm an information science student. I like making simple websites
+             and learning how things work.</p>
+        </div>
+        <div class="card">
+          <h3>Skills</h3>
+          <div class="tags">
+            <span>UI Design</span>
+            <span>Problem Solving</span>
+            <span>Accessibility</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="screen" id="tasks">
+    <div class="top">
+      <h2>Tasks</h2>
+      <button class="btn dark">+ Add new task</button>
+    </div>
+
+    <div class="counts">
+      <div class="card">
+        <div class="name">Total Tasks</div>
+        <b>12</b>
+        <small>Across this project</small>
+      </div>
+      <div class="card">
+        <div class="name">To Do</div>
+        <b>5</b>
+        <small>Ready to start</small>
+      </div>
+      <div class="card">
+        <div class="name">In Progress</div>
+        <b>3</b>
+        <small>Currently active</small>
+      </div>
+      <div class="card">
+        <div class="name">Complete</div>
+        <b>4</b>
+        <small>33% of total</small>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="text" placeholder="Search tasks">
+      <select>
+        <option>All statuses</option>
+      </select>
+      <select>
+        <option>Due date</option>
+      </select>
+      <select>
+        <option>Sort: Newest</option>
+      </select>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
